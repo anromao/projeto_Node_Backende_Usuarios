@@ -6,15 +6,13 @@ const rotasUsuarios = require('./routes')
 const app = express()
 const PORT = process.env.PORT || 3000
 
-
 app.use(cors())
 app.use(express.json())
 
-//definindo o prefixo /api
+//Definidndo o prefixo /api para as rotas
 app.use('/api', rotasUsuarios)
 
-//execultando o servidor web
-app.listen(PORT, ()=>{
-    console.log(`servidor backend rodando na porta ${PORT}`)
+//Executandoo servidor web
+app.listen(PORT, () => {
+    console.log(`Servidor backend rodando na porta ${PORT}`)
 })
-

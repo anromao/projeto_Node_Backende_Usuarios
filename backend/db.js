@@ -1,5 +1,4 @@
 require('dotenv').config()
-
 const mysql = require('mysql2/promise')
 
 const pool = mysql.createPool({
@@ -12,4 +11,4 @@ const pool = mysql.createPool({
     queueLimit: 0
 })
 
-module.export = pool
+module.exports = pool

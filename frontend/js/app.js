@@ -1,16 +1,15 @@
-//conectando frontend ao backend
+//conectando o frontend ao backend
 const URL_API = 'http://localhost:3000/api/usuarios'
 
-//declarando as variaveis globais
+//declarando as variáveis globais
 const form = document.getElementById('form-usuarios')
-const inputid = document.getElementById('usuario-id')
+const inputId = document.getElementById('usuario-id')
 const inputNome = document.getElementById('nome')
 const inputEmail = document.getElementById('email')
-const corpoTabela = document.getElementById('btn-cancelar')
+const corpoTabela = document.getElementById('corpo-tabela')
 const btnCancelar = document.getElementById('btn-cancelar')
 
-// carregando os eventos
-
+//carregando os eventos
 document.addEventListener('DOMContentLoaded', carregarUsuarios)
 
 //CRUD
@@ -23,30 +22,37 @@ async function carregarUsuarios() {
         dados.forEach(u => {
             const tr = document.createElement('tr')
             tr.innerHTML = `
-                <td>${u.nome}</td>
-                <td>${u.email}
-                <td>
-                <button class="btn-editar onclick="preencherForm(${u.id},'${u.email}')">
-                Editar</button>
-                <button class="btn-deletar onclick="removerUsuario(${u.id})">Excluir</button>
-                `
+            <td>${u.nome}</td>
+            <td>${u.email}</td>
+            <td>
+            <button class="btn-editar" 
+            onclick="preencherForm(${u.id},'${u.nome}','${u.email}')">
+            Editar</button>
+            <button class="btn-deletar"
+            onclick="removerUsuario(${u.id})">Excluir</button>
+            `
             corpoTabela.appendChild(tr)
         })
-
     } catch (erro) {
-        console.erro('erro ao renderizar os dados', erro)
+        console.error('Erro ao renderizar os dados', erro)
     }
 }
 //criando o post e update
 form.addEventListener('submit', async (e) => {
     e.preventDefault()
-    constis = inputid.value
-    const payload = { nome: inputNome.value, email: inputEmail.value }
-    const config = {
-        method: id ? 'put' : 'post',
-        Headers: { 'content-type': 'aplication/json' },
-        body: json.stringify(payload)
+    const id = inputId.value
+    const payload = {
+        nome: inputNome.value,
+        email: inputEmail.value
     }
+    const config = {
+        method: id ? 'PUT' : 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    }
+
     const urlFinal = id ? `${URL_API}/${id}` : URL_API
     try {
         const resposta = await fetch(urlFinal, config)
@@ -58,35 +64,34 @@ form.addEventListener('submit', async (e) => {
         limparFormulario()
         carregarUsuarios()
     } catch (erro) {
-        console.erro('erro na requisição externa', erro)
-
+        console.error('Erro na requisição externa', erro)
     }
-})
 
-//Excluir usuarios
+})
+//Excluir usuários
 async function removerUsuario(id) {
-    if (!confirm('deseja excluir esse usuario permanentemente'))
-        return
+    if (!confirm('Deseja excluir este usuário permanentemente')) return
     try {
-        await fetch(`${URL_API}/${id}`, { method: 'Delete' })
+        await fetch(`${URL_API}/${id}`, { method: 'DELETE' })
         carregarUsuarios()
     } catch (erro) {
-        console.erro('Erro ao remover registro:', erro)
+        console.error('Erro ao remover registro: ', erro)
     }
-}
 
-//manipulando o estado do formulario
-function preencherForm(id, nome, email){
-    inputid.value = id
+}
+//Manipulando o estado do formulário
+function preencherForm(id, nome, email) {
+    inputId.value = id
     inputNome.value = nome
     inputEmail.value = email
     btnCancelar.style.display = 'inline-block'
 }
-btnCancelar.addEventListener('click',limparFormulario)
 
-//limpando formulario
-function limpandoFormulario(){
+btnCancelar.addEventListener('click', limparFormulario)
+
+//limpando o formulário
+function limparFormulario() {
     form.reset()
-    inputid.value = ''
-    btnCancelar.style.display ='nome'
+    inputId.value = ''
+    btnCancelar.style.display = 'nome'
 }
